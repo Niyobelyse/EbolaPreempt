@@ -2,9 +2,6 @@
 
 **ML-Powered Ebola Outbreak Prediction and Early Warning System for Rwanda**
 
-BSc. Software Engineering — African Leadership University
-Authors: Belyse Niyonsenga · Dirac Murairi
-
 ---
 
 ## Description
@@ -179,23 +176,6 @@ Models are serialised as `.pkl` files and loaded at Django startup.
 - **Frontend:** Built with `npm run build` and served from S3 or Netlify
 - **Environment variables:** `SECRET_KEY`, `DATABASE_URL`, `ALLOWED_HOSTS` loaded from `.env`
 
-To switch to PostgreSQL locally, update `backend/ebolapreempt/settings.py`:
-
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ebolapreempt',
-        'USER': 'postgres',
-        'PASSWORD': 'your_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-```
-
-Then run `python manage.py migrate`.
-
 ---
 
 ## Screenshots
@@ -210,14 +190,8 @@ See `/designs/` folder for Figma wireframes and app screenshots.
 |---|---|
 | Frontend | React 19, Tailwind CSS 4, Vite, Recharts |
 | Backend | Django 5.2, Django REST Framework 3.17, SimpleJWT |
-| Database | SQLite (dev) → PostgreSQL 17 (production) |
+| Database | SQLite |
 | ML | scikit-learn 1.9, XGBoost 3.x, pandas, NumPy |
 | Data Sources | HDX API (Ebola cases), Open-Meteo API (weather), IOM reports (mobility) |
 | Auth | JWT (access + refresh tokens) |
 
----
-
-## License
-
-This project is developed as a BSc. capstone at African Leadership University.
-Data sources are publicly licensed (HDX CC BY-IGO, Open-Meteo CC BY 4.0).
