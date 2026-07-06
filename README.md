@@ -361,13 +361,17 @@ The system directly addresses the core problem stated in the proposal: providing
 
 ## Deployment
 
+**Live URLs:**
+- Frontend: https://ebolapreempt-1.onrender.com
+- Backend API: https://ebolapreempt.onrender.com/api
+
 ### Stack
 
 | Component | Service | Cost |
 |---|---|---|
 | Backend API | [Render](https://render.com) — free web service | Free |
 | Database | [Neon](https://neon.tech) — serverless PostgreSQL | Free (512 MB) |
-| Frontend | [Vercel](https://vercel.com) — static hosting | Free |
+| Frontend | [Render](https://render.com) — free static site | Free |
 
 ---
 
@@ -417,20 +421,22 @@ The system directly addresses the core problem stated in the proposal: providing
 
 ---
 
-### Step 3 — Deploy the frontend on Vercel
+### Step 3 — Deploy the frontend on Render (Static Site)
 
-1. Go to [vercel.com](https://vercel.com) → **Sign up free** (use GitHub login)
-2. Click **Add New → Project** → import your GitHub repository
-3. Set **Root Directory** to `frontend/ebopreempt`
-4. Add this **Environment Variable**:
+1. Go to [render.com](https://render.com) → **New → Static Site** → connect your GitHub repository
+2. Set these build settings:
+   - **Root Directory:** `frontend/ebopreempt`
+   - **Build Command:** `npm install && npm run build`
+   - **Publish Directory:** `dist`
+3. Add this **Environment Variable**:
 
    | Key | Value |
    |---|---|
-   | `VITE_API_BASE_URL` | `https://your-app-name.onrender.com/api` |
+   | `VITE_API_BASE_URL` | `https://ebolapreempt.onrender.com/api` |
 
-5. Click **Deploy** — Vercel auto-detects Vite and builds `npm run build`
-6. Note your Vercel URL (e.g. `https://ebolapreempt.vercel.app`)
-7. Go back to Render → update `CORS_ALLOWED_ORIGINS` to that Vercel URL → redeploy
+4. Click **Deploy Static Site**
+5. Note your Render URL (e.g. `https://ebolapreempt-1.onrender.com`)
+6. Go back to the backend Render service → update `CORS_ALLOWED_ORIGINS` to that URL → Render auto-redeploys
 
 ---
 
@@ -444,13 +450,13 @@ The system directly addresses the core problem stated in the proposal: providing
 - [x] Acknowledge button updates alert status in DB and UI
 - [x] History page renders weekly records table and bar chart
 
-### Production environment — checklist (complete after deploying)
+### Production environment — checklist
 
-- [ ] `GET https://your-app.onrender.com/api/records/` returns 200 with data
-- [ ] Login with admin credentials works on Vercel frontend
-- [ ] `Run Prediction` button on Dashboard generates a risk score
-- [ ] Alert appears on the Alerts page
-- [ ] Acknowledge button works
+- [x] `GET https://ebolapreempt.onrender.com/api/records/` returns 200 with data
+- [x] Login with admin credentials works on https://ebolapreempt-1.onrender.com
+- [x] `Run Prediction` button on Dashboard generates a risk score
+- [x] Alert appears on the Alerts page
+- [x] Acknowledge button works
 
 ---
 
