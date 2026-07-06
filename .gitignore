@@ -3,6 +3,7 @@
 *.env
 .env.*
 !.env.example
+!frontend/ebopreempt/.env.production
 
 # Python
 __pycache__/
