@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/auth';
 import { useAuth } from '../context/AuthContext';
-import Button from '../components/Button';
-import Card from '../components/Card';
+import ebolaImg from '../assets/ebola.jpeg';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -31,58 +30,69 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] px-4">
-      <Card className="w-full max-w-md">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-[#1E3A5F]">EbolaPreempt</h1>
+    <div
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle, #cbd5e1 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
+        backgroundColor: '#f8fafc',
+      }}
+    >
+      <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg overflow-hidden">
+        {/* Hero image */}
+        <img
+          src={ebolaImg}
+          alt="Ebola research"
+          className="w-full h-72 object-cover"
+        />
 
-        </div>
+        {/* Card body */}
+        <div className="px-10 py-8">
+          <h1 className="text-2xl font-bold text-[#1E3A5F] mb-2">
+            Welcome to EbolaPreempt!
+          </h1>
+          <p className="text-base text-gray-500 mb-6">
+            Sign in to access the outbreak risk dashboard and early warning alerts.
+          </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-              Username
-            </label>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
-              placeholder="Please enter your username"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#06B6D4] text-gray-700"
+              placeholder="Username"
             />
-          </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
-              placeholder="Please enter your password"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#06B6D4] text-gray-700"
+              placeholder="Password"
             />
-          </div>
 
-          {error && (
-            <p className="text-sm text-[#EF4444] bg-red-50 px-3 py-2 rounded-lg">
-              {error}
-            </p>
-          )}
+            {error && (
+              <p className="text-sm text-[#EF4444] bg-red-50 px-4 py-2.5 rounded-lg">
+                {error}
+              </p>
+            )}
 
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? 'Signing in...' : 'Sign in'}
-          </Button>
-        </form>
-
-        <p className="text-center text-xs text-gray-400 mt-6">
-        </p>
-      </Card>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-lg bg-[#1E3A5F] hover:bg-[#16304f] text-white font-semibold text-base transition-colors disabled:opacity-60"
+            >
+              {loading ? 'Signing in...' : 'Login'}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

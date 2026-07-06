@@ -42,11 +42,21 @@ export default function RiskZoneMap({ selectedDistrict, riskScore }) {
         <text x="340" y="30" fontSize="11" fill="#94A3B8" fontWeight="600">Uganda</text>
         <line x1="400" y1="35" x2="400" y2="150" stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 3" />
 
-        {/* Rwanda outline (simplified polygon) */}
+
         <polygon
           points="95,60 230,50 410,100 430,200 370,330 220,350 95,310"
-          fill="#E0F2FE"
-          stroke="#BAE6FD"
+          fill={
+            riskScore === null ? '#E0F2FE'
+            : riskScore >= 70   ? '#FEE2E2'
+            : riskScore >= 40   ? '#FEF3C7'
+            :                     '#DCFCE7'
+          }
+          stroke={
+            riskScore === null ? '#BAE6FD'
+            : riskScore >= 70   ? '#FECACA'
+            : riskScore >= 40   ? '#FDE68A'
+            :                     '#BBF7D0'
+          }
           strokeWidth="1.5"
         />
 
@@ -119,22 +129,10 @@ export default function RiskZoneMap({ selectedDistrict, riskScore }) {
       {/* Side info panel */}
       <div className="flex-1 space-y-4">
         <div>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
+          {/* <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
             Selected District
-          </p>
+          </p> */}
           <p className="text-lg font-bold text-[#1E3A5F]">{selectedDistrict}</p>
-        </div>
-
-        <div>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
-            Current Risk Level
-          </p>
-          <span
-            className="inline-block px-3 py-1 rounded-full text-sm font-semibold"
-            style={{ backgroundColor: `${color}20`, color }}
-          >
-            {label}
-          </span>
         </div>
 
         {riskScore !== null && (
@@ -154,12 +152,12 @@ export default function RiskZoneMap({ selectedDistrict, riskScore }) {
           </div>
         )}
 
-        <div className="pt-2 border-t border-gray-100">
+        {/* <div className="pt-2 border-t border-gray-100">
           <p className="text-xs text-gray-400">
             <span className="font-semibold text-amber-600">Yellow circles</span> = DRC border districts under active monitoring.
             The highlighted district shows the current prediction result.
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

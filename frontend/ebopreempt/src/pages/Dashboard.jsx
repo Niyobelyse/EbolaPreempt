@@ -80,14 +80,13 @@ function Dashboard() {
 
   const handleExport = () => {
     if (predictions.length === 0) return;
-    const headers = ['Date', 'Risk Score (%)', 'Alert', 'Model'];
+    const headers = ['Date', 'Risk Score (%)', 'Alert'];
     const rows = [...predictions]
       .sort((a, b) => new Date(a.predicted_at) - new Date(b.predicted_at))
       .map((p) => [
         new Date(p.predicted_at).toLocaleDateString(),
         Math.round(p.risk_score * 100),
         p.early_warning_alert === 1 ? 'HIGH' : 'LOW',
-        p.model_used,
       ]);
     const csv = [headers, ...rows].map((r) => r.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -156,21 +155,25 @@ function Dashboard() {
                 <StatCard
                   label="Current Risk Score"
                   value={riskScore !== null ? `${riskScore}%` : 'N/A'}
-                  subtext={latestRisk ? `Model: ${latestRisk.model_used}` : 'No prediction yet'}
                   icon={<Activity size={28} />}
                 />
                 <Card>
-                  <p className="text-sm text-gray-500 mb-2">Alert Status</p>
-                  {latestRisk ? (
-                    <RiskBadge alertFlag={latestRisk.early_warning_alert} />
-                  ) : (
-                    <p className="text-gray-400 text-sm">No prediction yet</p>
-                  )}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-500">Alert Status</p>
+                      <div className="mt-1 -ml-3">
+                        {latestRisk ? (
+                          <RiskBadge alertFlag={latestRisk.early_warning_alert} />
+                        ) : (
+                          <p className="text-gray-400 text-sm">No prediction yet</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </Card>
                 <StatCard
                   label="District"
                   value={selectedDistrict}
-                  subtext="Rwanda"
                   icon={<MapPin size={28} />}
                 />
               </div>
@@ -178,7 +181,7 @@ function Dashboard() {
               {/* Risk zone map */}
               <Card className="mb-6">
                 <h3 className="text-md font-semibold text-gray-700 mb-4">
-                  Border Risk Zone — Rubavu / Goma Corridor
+                  Border Risk Zone
                 </h3>
                 <RiskZoneMap selectedDistrict={selectedDistrict} riskScore={riskScore} />
               </Card>
