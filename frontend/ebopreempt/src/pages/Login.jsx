@@ -50,7 +50,7 @@ function Login() {
               onChange={(e) => setUsername(e.target.value)}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
-              placeholder="admin"
+              placeholder="Please enter your username"
             />
           </div>
 
@@ -65,7 +65,7 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
-              placeholder="••••••••"
+              placeholder="Please enter your password"
             />
           </div>
 
@@ -81,7 +81,6 @@ function Login() {
         </form>
 
         <p className="text-center text-xs text-gray-400 mt-6">
-          Public Health Officer access only — Rwanda Ministry of Health
         </p>
       </Card>
     </div>

@@ -3,14 +3,16 @@ from django.db import models
 class WeeklyDataRecord(models.Model):
     district = models.CharField(max_length=100, default='Rubavu')
     week_start_date = models.DateField()
-    ebola_cases = models.IntegerField(default=0)
-    cases_lag_1wk = models.IntegerField(default=0)
-    temperature = models.FloatField(default=0.0)
-    rainfall = models.FloatField(default=0.0)
-    ndvi_value = models.FloatField(default=0.0)
-    transit_volume = models.IntegerField(default=0)
-    transit_lag_1wk = models.IntegerField(default=0)
     fetched_at = models.DateTimeField(auto_now_add=True)
+
+    # ISO week string (e.g. "2026-W20") matching data/raw/ml_features_dataset.csv,
+    # used by the Isolation Forest risk model. Populated by load_risk_dataset.
+    week = models.CharField(max_length=10, blank=True, default='')
+    active_regional_cases = models.FloatField(null=True, blank=True)
+    distance_to_outbreak_km = models.FloatField(null=True, blank=True)
+    border_inflow_count = models.FloatField(null=True, blank=True)
+    transit_hub_count = models.IntegerField(null=True, blank=True)
+    isolation_capacity_score = models.IntegerField(null=True, blank=True)
 
     class Meta:
         ordering = ['-week_start_date']

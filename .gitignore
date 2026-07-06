@@ -19,8 +19,9 @@ venv/
 htmlcov/
 coverage/
 
-# Serialised ML models
+# Serialised ML models — exclude everywhere EXCEPT the trained models needed for deployment
 *.pkl
+!backend/ml_models/*.pkl
 
 # Django
 db.sqlite3
@@ -34,9 +35,11 @@ node_modules/
 build/
 dist/
 
-# Data
-data/raw/
+# Data — exclude everything inside data/raw/ except the dataset CSV
+data/raw/*
+!data/raw/ml_features_dataset.csv
 *.csv
+!data/raw/ml_features_dataset.csv
 
 # Jupyter
 .ipynb_checkpoints/

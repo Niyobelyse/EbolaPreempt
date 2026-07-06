@@ -33,3 +33,8 @@ export const getAlerts = async (district) => {
   const response = await apiClient.get('/alerts/', { params });
   return response.data;
 };
+
+export const acknowledgeAlert = async (id) => {
+  const response = await apiClient.patch(`/alerts/${id}/`, { acknowledged: true });
+  return response.data;
+};
