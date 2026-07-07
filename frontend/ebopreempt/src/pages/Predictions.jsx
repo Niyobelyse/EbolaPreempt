@@ -78,7 +78,7 @@ function Predictions() {
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#EFF6FF] border border-blue-100 text-xs text-blue-700">
                 <Clock size={13} className="shrink-0 text-[#06B6D4]" />
-                <span>Daily Auto Prediction <strong>at 19:20 CAT</strong></span>
+                <span>Daily Auto Prediction <strong>at 20:00 CAT</strong></span>
                 {sorted.length > 0 && (
                   <span className="text-blue-400 ml-1">
                     · Last run {new Date(sorted[0].predicted_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}

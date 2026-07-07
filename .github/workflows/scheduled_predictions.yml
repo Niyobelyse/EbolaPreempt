@@ -1,0 +1,26 @@
+name: Scheduled Predictions
+
+on:
+  schedule:
+    - cron: "0 18 * * *"    # 18:00 UTC = 20:00 CAT daily
+  workflow_dispatch:          # also allows manual trigger from GitHub Actions UI
+
+jobs:
+  run-predictions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get JWT token
+        id: auth
+        run: |
+          TOKEN=$(curl -s -X POST https://ebolapreempt.onrender.com/api/token/ \
+            -H "Content-Type: application/json" \
+            -d '{"username":"admin","password":"${{ secrets.DJANGO_ADMIN_PASSWORD }}"}' \
+            | python3 -c "import sys,json; print(json.load(sys.stdin)['access'])")
+          echo "token=$TOKEN" >> $GITHUB_OUTPUT
+
+      - name: Run predictions for all districts
+        run: |
+          curl -s -X POST https://ebolapreempt.onrender.com/api/predict/run-all/ \
+            -H "Authorization: Bearer ${{ steps.auth.outputs.token }}" \
+            -H "Content-Type: application/json" \
+            | python3 -m json.tool

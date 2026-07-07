@@ -22,22 +22,3 @@ services:
         value: admin@ebolapreempt.com
       - key: DJANGO_SUPERUSER_PASSWORD
         sync: false          # set a strong password in the Render dashboard
-
-  - type: cron
-    name: ebolapreempt-predictions-cron
-    env: python
-    rootDir: backend
-    buildCommand: chmod +x build.sh && ./build.sh
-    schedule: "20 17 * * *"  # 17:20 UTC = 19:20 CAT daily
-    startCommand: python manage.py run_scheduled_predictions
-    envVars:
-      - key: SECRET_KEY
-        sync: false
-      - key: DEBUG
-        value: false
-      - key: DATABASE_URL
-        sync: false
-      - key: ALLOWED_HOSTS
-        sync: false
-      - key: CORS_ALLOWED_ORIGINS
-        sync: false
