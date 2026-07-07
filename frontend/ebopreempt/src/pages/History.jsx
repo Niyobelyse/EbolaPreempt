@@ -207,7 +207,7 @@ function History() {
               {chartData.length > 0 && (
                 <Card className="mb-6">
                   <h3 className="text-md font-semibold text-gray-700 mb-4">
-                    Weekly Active Regional Cases — {filterDistrict || selectedDistrict}
+                    Weekly Active Regional Cases
                   </h3>
                   <ResponsiveContainer width="100%" height={220}>
                     <BarChart data={chartData} barSize={24}>
