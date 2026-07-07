@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Alerts from './pages/Alerts';
 import History from './pages/History';
+import Predictions from './pages/Predictions';
 
 function App() {
   return (
@@ -35,6 +36,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <History />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/predictions"
+              element={
+                <ProtectedRoute>
+                  <Predictions />
                 </ProtectedRoute>
               }
             />

@@ -20,7 +20,6 @@ function Alerts() {
   const [dateTo, setDateTo] = useState('');
   const [acknowledging, setAcknowledging] = useState(null);
   const [locationFilter, setLocationFilter] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('Rubavu');
 
   const loadAlerts = async () => {
     setLoading(true);
@@ -85,11 +84,7 @@ function Alerts() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      <Sidebar
-        selectedDistrict={selectedDistrict}
-        onSelectDistrict={setSelectedDistrict}
-        districts={[]}
-      />
+      <Sidebar />
 
       <div className="md:pl-64">
         <div className="max-w-6xl mx-auto px-6 py-8">

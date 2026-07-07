@@ -8,6 +8,7 @@ import {
 } from '../api/data';
 import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
+import DistrictFilter from '../components/DistrictFilter';
 import StatCard from '../components/StatCard';
 import RiskBadge from '../components/RiskBadge';
 import Button from '../components/Button';
@@ -109,16 +110,15 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      <Sidebar
-        selectedDistrict={selectedDistrict}
-        onSelectDistrict={setSelectedDistrict}
-        districts={districts}
-      />
+      <Sidebar />
 
       <div className="md:pl-64">
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <h2 className="text-xl font-bold text-gray-800">Risk Dashboard</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-bold text-gray-800">Risk Dashboard</h2>
+              <DistrictFilter districts={districts} value={selectedDistrict} onChange={setSelectedDistrict} />
+            </div>
 
             <div className="flex items-center gap-2">
               <button

@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Activity, LayoutDashboard, Bell, MapPin, LogOut, Menu, X, History } from 'lucide-react';
+import { Activity, LayoutDashboard, Bell, LogOut, Menu, X, History, TrendingUp } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const DRC_BORDER_DISTRICTS = ['Rubavu', 'Rusizi', 'Karongi', 'Nyamasheke'];
 
 const NAV_ITEMS = [
   { label: 'Risk Dashboard', icon: LayoutDashboard, path: '/dashboard' },
+  { label: 'Predictions', icon: TrendingUp, path: '/predictions' },
   { label: 'Alerts', icon: Bell, path: '/alerts' },
   { label: 'History', icon: History, path: '/history' },
 ];
 
-function Sidebar({ selectedDistrict, onSelectDistrict, districts }) {
+function Sidebar() {
   const [open, setOpen] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -53,46 +53,7 @@ function Sidebar({ selectedDistrict, onSelectDistrict, districts }) {
         })}
       </nav>
 
-      {/* District selector */}
-      <div className="px-6 py-4">
-        <label htmlFor="district-select" className="text-xs font-semibold text-white/50 uppercase tracking-wide">
-          Monitoring District
-        </label>
-        <select
-          id="district-select"
-          value={selectedDistrict}
-          onChange={(e) => onSelectDistrict(e.target.value)}
-          className="mt-2 w-full px-3 py-2 bg-white/5 border border-white/10 text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
-        >
-          {districts.length === 0 && <option value="Rubavu">Rubavu</option>}
-          {districts.map((d) => (
-            <option key={d} value={d} className="text-gray-800">{d}</option>
-          ))}
-        </select>
-      </div>
 
-      {/* DRC border watch */}
-      <div className="px-6 py-4">
-        <p className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">
-          DRC Border Districts
-        </p>
-        <div className="space-y-1">
-          {DRC_BORDER_DISTRICTS.map((d) => (
-            <button
-              key={d}
-              onClick={() => onSelectDistrict(d)}
-              className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-md text-sm transition-colors ${
-                selectedDistrict === d
-                  ? 'bg-white/10 text-white'
-                  : 'text-white/60 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              <MapPin size={14} />
-              {d}
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Logout */}
       <div className="mt-auto px-6 py-4">

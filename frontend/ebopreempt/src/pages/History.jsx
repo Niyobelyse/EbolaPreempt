@@ -6,8 +6,7 @@ import { History as HistoryIcon, Calendar, X, Download, Filter } from 'lucide-re
 import { getRecords, getDistricts } from '../api/data';
 import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
-
-const DRC_BORDER_DISTRICTS = ['Rubavu', 'Rusizi', 'Karongi', 'Nyamasheke'];
+import DistrictFilter from '../components/DistrictFilter';
 
 function History() {
   const [records, setRecords] = useState([]);
@@ -49,9 +48,7 @@ function History() {
     setDateTo('');
   };
 
-  const districtOptions = districts.length > 0
-    ? [...new Set(districts)]
-    : DRC_BORDER_DISTRICTS;
+  const districtOptions = [...new Set(districts)];
 
   const filtered = records.filter((r) => {
     if (filterDistrict && r.district !== filterDistrict) return false;
@@ -101,21 +98,20 @@ function History() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      <Sidebar
-        selectedDistrict={selectedDistrict}
-        onSelectDistrict={setSelectedDistrict}
-        districts={districts}
-      />
+      <Sidebar />
 
       <div className="md:pl-64">
         <div className="max-w-6xl mx-auto px-6 py-8">
 
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-              <HistoryIcon size={22} className="text-[#06B6D4]" />
-              District History
-            </h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                <HistoryIcon size={22} className="text-[#06B6D4]" />
+                District History
+              </h2>
+              <DistrictFilter districts={districts} value={selectedDistrict} onChange={setSelectedDistrict} />
+            </div>
             <button
               onClick={handleExport}
               disabled={filtered.length === 0}

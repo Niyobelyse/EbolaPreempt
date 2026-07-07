@@ -1,11 +1,23 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 
+
+def api_root(request):
+    return JsonResponse({
+        'service': 'EbolaPreempt API',
+        'status': 'running',
+        'docs': '/admin/',
+        'api': '/api/',
+    })
+
+
 urlpatterns = [
+    path('', api_root),
     path('admin/', admin.site.urls),
     # JWT auth
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
