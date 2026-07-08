@@ -8,8 +8,30 @@
 |---|---|
 | **Live App** | https://ebolapreempt-1.onrender.com |
 | **Backend API** | https://ebolapreempt.onrender.com/api |
-| **Demo Video** | *(link to be added before submission)* |
+| **Demo Video** |https://drive.google.com/file/d/1VYbmr75UufjDxvN27nBNyIdA01Gd80SA/view?usp=drive_link|
 | **GitHub Repository** | https://github.com/Niyobelyse/EbolaPreempt |
+
+## Screenshots
+
+**Login**
+
+![Login](docs/screenshots/login.png)
+
+**Risk Dashboard**
+
+![Risk Dashboard](docs/screenshots/dashboard.png)
+
+**Predictions**
+
+![Predictions](docs/screenshots/predictions.png)
+
+**Alerts**
+
+![Alerts](docs/screenshots/alerts.png)
+
+**History**
+
+![History](docs/screenshots/history.png)
 
 ## Overview
 
@@ -306,6 +328,8 @@ apps.prediction. 13 tests  Prediction constraints, run endpoint, district filter
 Total: 27 tests in 5.46 s. OK (0 failures, 0 errors)
 ```
 
+![Django tests passing](docs/screenshots/django-tests.png)
+
 ### ML unit test suite. 15 tests
 
 ```bash
@@ -321,6 +345,8 @@ Total: 15 tests in 0.36 s. OK (0 failures, 0 errors)
 
 Combined: 42 tests, 0 failures, 0 errors
 ```
+
+![ML tests passing](docs/screenshots/ml-tests.png)
 
 ### Different inputs tested
 
