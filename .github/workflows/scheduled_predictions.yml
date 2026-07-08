@@ -9,18 +9,25 @@ jobs:
   run-predictions:
     runs-on: ubuntu-latest
     steps:
+      - name: Wake up backend (cold start)
+        run: |
+          echo "Pinging backend to wake it from sleep..."
+          curl -s --max-time 60 https://ebolapreempt.onrender.com/ || true
+          sleep 20
+
       - name: Get JWT token
         id: auth
         run: |
-          TOKEN=$(curl -s -X POST https://ebolapreempt.onrender.com/api/token/ \
+          RESPONSE=$(curl -s --max-time 60 -X POST https://ebolapreempt.onrender.com/api/token/ \
             -H "Content-Type: application/json" \
-            -d '{"username":"admin","password":"${{ secrets.DJANGO_ADMIN_PASSWORD }}"}' \
-            | python3 -c "import sys,json; print(json.load(sys.stdin)['access'])")
+            -d '{"username":"admin","password":"${{ secrets.DJANGO_ADMIN_PASSWORD }}"}')
+          echo "Auth response: $RESPONSE"
+          TOKEN=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['access'])")
           echo "token=$TOKEN" >> $GITHUB_OUTPUT
 
       - name: Run predictions for all districts
         run: |
-          curl -s -X POST https://ebolapreempt.onrender.com/api/predict/run-all/ \
+          curl -s --max-time 120 -X POST https://ebolapreempt.onrender.com/api/predictions/run-all/ \
             -H "Authorization: Bearer ${{ steps.auth.outputs.token }}" \
             -H "Content-Type: application/json" \
             | python3 -m json.tool
