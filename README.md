@@ -11,6 +11,13 @@
 | **Demo Video** |https://drive.google.com/file/d/1VYbmr75UufjDxvN27nBNyIdA01Gd80SA/view?usp=drive_link|
 | **GitHub Repository** | https://github.com/Niyobelyse/EbolaPreempt |
 
+**Test credentials (live app)**
+
+Username: `admin`  
+Password: `TestPass123!`
+
+The backend is hosted on Render's free tier and may take 30 to 60 seconds to wake up on the first request.
+
 ## Screenshots
 
 **Login**
