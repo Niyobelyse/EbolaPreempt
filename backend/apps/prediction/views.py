@@ -1,3 +1,4 @@
+import pandas as pd
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -56,6 +57,32 @@ class PredictionViewSet(viewsets.ModelViewSet):
                 errors.append({'district': district, 'error': str(exc)})
 
         return Response({'results': results, 'errors': errors})
+
+    @action(detail=False, methods=['get'], url_path='backtest')
+    def backtest(self, request):
+        """
+        Leave-One-Week-Out backtest. Trains a fresh Isolation Forest on 6 of the
+        7 available weeks and predicts the held-out week. Repeated for all 7 weeks.
+        Returns per-prediction results and aggregate metrics.
+        """
+        from apps.ingestion.models import WeeklyDataRecord
+        from ml_models.backtest import run_backtest
+        from .services import RISK_FIELD_COLUMNS
+
+        records = WeeklyDataRecord.objects.exclude(week='').order_by('week_start_date')
+        if not records.exists():
+            return Response(
+                {'error': 'No weekly data loaded. Run load_risk_dataset first.'},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        df = pd.DataFrame.from_records(records.values(*RISK_FIELD_COLUMNS.keys()))
+        df = df.rename(columns=RISK_FIELD_COLUMNS)
+
+        result = run_backtest(df)
+        if 'error' in result:
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        return Response(result)
 
     @action(detail=False, methods=['post'], url_path='run')
     def run_prediction(self, request):

@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Alerts from './pages/Alerts';
 import History from './pages/History';
 import Predictions from './pages/Predictions';
+import Backtest from './pages/Backtest';
 
 function App() {
   return (
@@ -44,6 +45,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Predictions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/backtest"
+              element={
+                <ProtectedRoute>
+                  <Backtest />
                 </ProtectedRoute>
               }
             />

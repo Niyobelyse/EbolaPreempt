@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Activity, LayoutDashboard, Bell, LogOut, Menu, X, History, TrendingUp } from 'lucide-react';
+import { Activity, LayoutDashboard, Bell, LogOut, Menu, X, History, TrendingUp, FlaskConical } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 
@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { label: 'Predictions', icon: TrendingUp, path: '/predictions' },
   { label: 'Alerts', icon: Bell, path: '/alerts' },
   { label: 'History', icon: History, path: '/history' },
+  { label: 'Backtest', icon: FlaskConical, path: '/backtest' },
 ];
 
 function Sidebar() {

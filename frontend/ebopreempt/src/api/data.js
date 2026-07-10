@@ -38,3 +38,8 @@ export const acknowledgeAlert = async (id) => {
   const response = await apiClient.patch(`/alerts/${id}/`, { acknowledged: true });
   return response.data;
 };
+
+export const getBacktest = async () => {
+  const response = await apiClient.get('/predictions/backtest/');
+  return response.data;
+};

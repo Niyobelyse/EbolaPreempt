@@ -368,6 +368,21 @@ Combined: 42 tests, 0 failures, 0 errors
 | Duplicate dataset load | `test_update_or_create_idempotent` | 1 row, value updated | Passed |
 | Rerun after acknowledging alert | `test_rerun_preserves_acknowledged_state` | `acknowledged` stays `True` | Passed |
 
+### Backtesting
+
+Since there are no historical Ebola labels for Rwanda, we held out one week at a time, retrained on the rest, and checked whether the model flagged the right districts. The endpoint is `GET /api/predictions/backtest/`.
+
+| Metric | Value |
+|---|---|
+| Rank correlation | 0.09 |
+| Districts correct (top 5) | 66% |
+| Avg risk when cases reported | 40% |
+| Avg risk in quiet weeks | 38% |
+
+66% is well above the 17% you would get by picking randomly from 30 districts. Week 2026-W24 was the strongest result: Musanze, Nyagatare, Nyabihu, Gicumbi, and Burera all came out as top-risk predictions and all had real case activity that week.
+
+The Backtest page in the sidebar shows all 210 held-out predictions.
+
 ### Environments tested
 
 | Environment | OS | Python | Database | Outcome |
