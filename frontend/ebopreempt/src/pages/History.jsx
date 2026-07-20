@@ -97,7 +97,7 @@ function History() {
   const hasFilters = filterDistrict || dateFrom || dateTo;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950">
       <Sidebar />
 
       <div className="md:pl-64">
@@ -106,7 +106,7 @@ function History() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
                 <HistoryIcon size={22} className="text-[#06B6D4]" />
                 District History
               </h2>
@@ -115,7 +115,7 @@ function History() {
             <button
               onClick={handleExport}
               disabled={filtered.length === 0}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <Download size={15} />
               Export CSV
@@ -132,7 +132,7 @@ function History() {
                 <select
                   value={filterDistrict}
                   onChange={(e) => setFilterDistrict(e.target.value)}
-                  className="text-xs px-2 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white text-gray-700"
+                  className="text-xs px-2 py-1.5 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                 >
                   <option value="">All Districts</option>
                   {districtOptions.map((d) => (
@@ -151,7 +151,7 @@ function History() {
               </div>
 
               {/* Divider */}
-              <div className="hidden sm:block w-px h-6 bg-gray-200 mx-1" />
+              <div className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
 
               {/* Date range */}
               <div className="flex items-center gap-2 flex-wrap">
@@ -163,7 +163,7 @@ function History() {
                     value={dateFrom}
                     max={dateTo || undefined}
                     onChange={(e) => setDateFrom(e.target.value)}
-                    className="text-xs px-2 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white text-gray-700"
+                    className="text-xs px-2 py-1.5 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                   />
                 </div>
                 <div className="flex items-center gap-1">
@@ -173,7 +173,7 @@ function History() {
                     value={dateTo}
                     min={dateFrom || undefined}
                     onChange={(e) => setDateTo(e.target.value)}
-                    className="text-xs px-2 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white text-gray-700"
+                    className="text-xs px-2 py-1.5 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                   />
                 </div>
                 {hasFilters && (
@@ -196,18 +196,18 @@ function History() {
           )}
 
           {loading ? (
-            <p className="text-gray-500 text-sm">Loading history...</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Loading history...</p>
           ) : (
             <>
               {/* Cases trend chart */}
               {chartData.length > 0 && (
                 <Card className="mb-6">
-                  <h3 className="text-md font-semibold text-gray-700 mb-4">
+                  <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-4">
                     Weekly Active Regional Cases
                   </h3>
                   <ResponsiveContainer width="100%" height={220}>
                     <BarChart data={chartData} barSize={24}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(156,163,175,0.2)" />
                       <XAxis dataKey="week" tick={{ fontSize: 11 }} />
                       <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
                       <Tooltip />
@@ -222,28 +222,28 @@ function History() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="bg-gray-50 border-b border-gray-100">
-                        <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">District</th>
-                        <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">Week Start</th>
-                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">Active Cases</th>
-                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">Distance to Outbreak (km)</th>
-                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">Border Inflow</th>
-                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">Transit Hubs</th>
-                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">Isolation Capacity</th>
+                      <tr className="bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-700">
+                        <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">District</th>
+                        <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">Week Start</th>
+                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">Active Cases</th>
+                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">Distance to Outbreak (km)</th>
+                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">Border Inflow</th>
+                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">Transit Hubs</th>
+                        <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">Isolation Capacity</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
                       {filtered.length === 0 ? (
                         <tr>
-                          <td colSpan={7} className="text-center py-10 text-gray-400 text-sm">
+                          <td colSpan={7} className="text-center py-10 text-gray-400 dark:text-gray-500 text-sm">
                             No records match the current filters.
                           </td>
                         </tr>
                       ) : (
                         filtered.map((r) => (
-                          <tr key={r.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-4 py-3 font-medium text-gray-800">{r.district}</td>
-                            <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
+                          <tr key={r.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors">
+                            <td className="px-4 py-3 font-medium text-gray-800 dark:text-gray-200">{r.district}</td>
+                            <td className="px-4 py-3 text-gray-600 dark:text-gray-400 whitespace-nowrap">
                               {new Date(r.week_start_date).toLocaleDateString('en-GB', {
                                 day: '2-digit', month: 'short', year: 'numeric',
                               })}
@@ -253,10 +253,10 @@ function History() {
                                 {r.active_regional_cases}
                               </span>
                             </td>
-                            <td className="px-4 py-3 text-right text-gray-600">{r.distance_to_outbreak_km != null ? r.distance_to_outbreak_km.toFixed(1) : '—'}</td>
-                            <td className="px-4 py-3 text-right text-gray-600">{r.border_inflow_count}</td>
-                            <td className="px-4 py-3 text-right text-gray-600">{r.transit_hub_count}</td>
-                            <td className="px-4 py-3 text-right text-gray-600">{r.isolation_capacity_score}</td>
+                            <td className="px-4 py-3 text-right text-gray-600 dark:text-gray-400">{r.distance_to_outbreak_km != null ? r.distance_to_outbreak_km.toFixed(1) : '—'}</td>
+                            <td className="px-4 py-3 text-right text-gray-600 dark:text-gray-400">{r.border_inflow_count}</td>
+                            <td className="px-4 py-3 text-right text-gray-600 dark:text-gray-400">{r.transit_hub_count}</td>
+                            <td className="px-4 py-3 text-right text-gray-600 dark:text-gray-400">{r.isolation_capacity_score}</td>
                           </tr>
                         ))
                       )}
@@ -265,7 +265,7 @@ function History() {
                 </div>
 
                 {filtered.length > 0 && (
-                  <div className="px-5 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-400">
+                  <div className="px-5 py-3 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30 text-xs text-gray-400 dark:text-gray-500">
                     Showing {filtered.length} of {records.length} record{records.length !== 1 ? 's' : ''}
                     {filterDistrict && ` · ${filterDistrict}`}
                     {(dateFrom || dateTo) && ' · date filtered'}

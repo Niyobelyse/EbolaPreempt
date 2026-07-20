@@ -2,16 +2,15 @@ import { useEffect, useState } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
-import { AlertTriangle, Activity, MapPin, RefreshCw, Download } from 'lucide-react';
+import { AlertTriangle, Activity, MapPin, Download } from 'lucide-react';
 import {
-  getDistricts, getLatestRisk, getPredictions, getAlerts, runPrediction,
+  getDistricts, getLatestRisk, getPredictions, getAlerts,
 } from '../api/data';
 import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
 import DistrictFilter from '../components/DistrictFilter';
 import StatCard from '../components/StatCard';
 import RiskBadge from '../components/RiskBadge';
-import Button from '../components/Button';
 import RiskZoneMap from '../components/RiskZoneMap';
 
 function Dashboard() {
@@ -21,8 +20,6 @@ function Dashboard() {
   const [predictions, setPredictions] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     getDistricts()
@@ -32,7 +29,6 @@ function Dashboard() {
 
   const loadData = async (district) => {
     setLoading(true);
-    setError('');
     try {
       const [riskRes, predRes, alertRes] = await Promise.allSettled([
         getLatestRisk(district),
@@ -55,8 +51,6 @@ function Dashboard() {
       } else {
         setAlerts([]);
       }
-    } catch {
-      setError('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
@@ -65,19 +59,6 @@ function Dashboard() {
   useEffect(() => {
     loadData(selectedDistrict);
   }, [selectedDistrict]);
-
-  const handleRunPrediction = async () => {
-    setRefreshing(true);
-    setError('');
-    try {
-      await runPrediction(selectedDistrict);
-      await loadData(selectedDistrict);
-    } catch {
-      setError('Failed to run prediction');
-    } finally {
-      setRefreshing(false);
-    }
-  };
 
   const handleExport = () => {
     if (predictions.length === 0) return;
@@ -109,14 +90,14 @@ function Dashboard() {
   const riskScore = latestRisk ? Math.round(latestRisk.risk_score * 100) : null;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950">
       <Sidebar />
 
       <div className="md:pl-64">
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
-              <h2 className="text-xl font-bold text-gray-800">Risk Dashboard</h2>
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Risk Dashboard</h2>
               <DistrictFilter districts={districts} value={selectedDistrict} onChange={setSelectedDistrict} />
             </div>
 
@@ -124,30 +105,18 @@ function Dashboard() {
               <button
                 onClick={handleExport}
                 disabled={predictions.length === 0}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 title="Export prediction history as CSV"
               >
                 <Download size={15} />
                 Export CSV
               </button>
 
-              <Button onClick={handleRunPrediction} disabled={refreshing}>
-                <span className="flex items-center gap-2">
-                  <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
-                  {refreshing ? 'Running...' : 'Run Prediction'}
-                </span>
-              </Button>
             </div>
           </div>
 
-          {error && (
-            <div className="bg-red-50 text-[#EF4444] px-4 py-3 rounded-lg mb-6 text-sm">
-              {error}
-            </div>
-          )}
-
           {loading ? (
-            <p className="text-gray-500">Loading dashboard...</p>
+            <p className="text-gray-500 dark:text-gray-400">Loading dashboard...</p>
           ) : (
             <>
               {/* Stat cards */}
@@ -180,7 +149,7 @@ function Dashboard() {
 
               {/* Risk zone map */}
               <Card className="mb-6">
-                <h3 className="text-md font-semibold text-gray-700 mb-4">
+                <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-4">
                   Border Risk Zone
                 </h3>
                 <RiskZoneMap selectedDistrict={selectedDistrict} riskScore={riskScore} />
@@ -188,11 +157,11 @@ function Dashboard() {
 
               {/* Trend chart */}
               <Card className="mb-6">
-                <h3 className="text-md font-semibold text-gray-700 mb-4">Risk Score Trend</h3>
+                <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-4">Risk Score Trend</h3>
                 {chartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(156,163,175,0.2)" />
                       <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                       <YAxis tick={{ fontSize: 12 }} domain={[0, 100]} />
                       <Tooltip formatter={(v) => [`${v}%`, 'Risk Score']} />
@@ -206,25 +175,25 @@ function Dashboard() {
                     </LineChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-gray-400 text-sm">
-                    No prediction history yet for {selectedDistrict}. Click "Run Prediction" to generate one.
+                  <p className="text-gray-400 dark:text-gray-500 text-sm">
+                    No prediction history yet for {selectedDistrict}. Run a prediction from the Predictions page.
                   </p>
                 )}
               </Card>
 
               {/* Recent alerts */}
               <Card>
-                <h3 className="text-md font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
                   <AlertTriangle size={18} className="text-[#EF4444]" />
                   Recent Alerts
                 </h3>
                 {alerts.length > 0 ? (
-                  <ul className="divide-y divide-gray-100">
+                  <ul className="divide-y divide-gray-100 dark:divide-gray-700/50">
                     {alerts.map((alert) => (
                       <li key={alert.id} className="py-3 flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-gray-800">{alert.message}</p>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{alert.message}</p>
+                          <p className="text-xs text-gray-400 dark:text-gray-500">
                             {new Date(alert.sent_at).toLocaleString()}
                           </p>
                         </div>

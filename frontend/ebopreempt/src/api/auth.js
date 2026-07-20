@@ -20,3 +20,13 @@ export const logout = () => {
 export const isAuthenticated = () => {
   return !!localStorage.getItem('access_token');
 };
+
+export const register = async (username, email, password, confirmPassword) => {
+  const response = await axios.post(`${API_BASE_URL}/auth/register/`, {
+    username,
+    email,
+    password,
+    confirm_password: confirmPassword,
+  });
+  return response.data;
+};

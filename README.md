@@ -42,16 +42,16 @@ The backend is hosted on Render's free tier and may take 30 to 60 seconds to wak
 
 ## Overview
 
-EbolaPreempt is a machine learning early warning system built to help Rwanda detect potential Ebola cross-border risks before they become outbreaks. It pulls real epidemiological and mobility data from HDX/WHO, runs it through an Isolation Forest anomaly detection model, and surfaces risk scores and alerts on a live React dashboard.
+EbolaPreempt is a machine learning early warning system built to help Rwanda detect potential Ebola cross-border risks before they become outbreaks. It uses a seeded district baseline dataset and, before scheduled predictions, fetches the latest official WHO regional Ebola report. It then surfaces risk scores and alerts on a live React dashboard.
 
 
 The full pipeline:
 
 ```
-HDX raw data → feature engineering → Isolation Forest inference
+Seeded district baselines + WHO regional case report → feature engineering → Isolation Forest inference
 → Prediction + Alert stored in PostgreSQL
 → React dashboard (Risk Score, Trend Chart, Alerts, History)
-→ Automated daily re-prediction via GitHub Actions cron job
+→ Automated daily WHO sync + re-prediction via GitHub Actions cron job
 ```
 
 ## System Architecture
@@ -230,7 +230,24 @@ The dashboard will be available at `http://localhost:5173`.
 python manage.py run_scheduled_predictions
 ```
 
-This runs predictions for all 30 districts at once, and it is the same command that GitHub Actions fires automatically every day at 20:00 CAT.
+To ingest the latest WHO regional report first:
+
+```bash
+python manage.py sync_who_ebola_data
+python manage.py run_scheduled_predictions
+```
+
+The scheduled GitHub Action performs these two steps every day at 20:00 CAT. WHO publishes country/health-zone data rather than Rwanda district surveillance, so the live DRC confirmed-case total is allocated across district baseline profiles using border-risk weights. Live rows are marked `who_regional_estimate` and include the source URL and report date; they are regional-risk estimates, not observed Rwanda district case counts.
+
+### 6. Retrain the model
+
+After collecting and reviewing sufficient new weekly data, retrain the model artifacts from the database:
+
+```bash
+python manage.py retrain_model
+```
+
+This refreshes the scaler, Isolation Forest model, risk-score bounds, and `ml_models/training_metadata.json` as one consistent set. Use `--seeded-only` to exclude WHO regional estimates. Retraining should follow data-quality review; it is not part of the daily prediction schedule.
 
 ## ML Model
 

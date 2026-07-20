@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
@@ -8,14 +9,28 @@ import Alerts from './pages/Alerts';
 import History from './pages/History';
 import Predictions from './pages/Predictions';
 import Backtest from './pages/Backtest';
+import Landing from './pages/Landing';
+import About from './pages/About';
+import HowItWorks from './pages/HowItWorks';
+import Privacy from './pages/Privacy';
+import Register from './pages/Register';
 
 function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
+      <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            {/* Protected routes */}
             <Route
               path="/dashboard"
               element={
@@ -56,10 +71,12 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+
+            <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

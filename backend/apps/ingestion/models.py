@@ -13,6 +13,9 @@ class WeeklyDataRecord(models.Model):
     border_inflow_count = models.FloatField(null=True, blank=True)
     transit_hub_count = models.IntegerField(null=True, blank=True)
     isolation_capacity_score = models.IntegerField(null=True, blank=True)
+    data_source = models.CharField(max_length=50, default='seeded_dataset')
+    source_url = models.URLField(blank=True, default='')
+    source_reported_date = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ['-week_start_date']

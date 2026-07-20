@@ -83,7 +83,7 @@ function Alerts() {
   const hasDateFilter = dateFrom || dateTo;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950">
       <Sidebar />
 
       <div className="md:pl-64">
@@ -91,7 +91,7 @@ function Alerts() {
 
           {/* Header */}
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
               <Bell size={22} className="text-[#06B6D4]" />
               Alerts
             </h2>
@@ -110,8 +110,8 @@ function Alerts() {
                     onClick={() => setFilter(value)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                       filter === value
-                        ? 'bg-[#1E3A5F] text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? 'bg-[#1E3A5F] dark:bg-[#06B6D4] text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                   >
                     {label}
@@ -120,35 +120,35 @@ function Alerts() {
               </div>
 
               {/* Divider */}
-              <div className="hidden sm:block w-px h-6 bg-gray-200 mx-1" />
+              <div className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
 
               {/* Date range */}
               <div className="flex items-center gap-2 flex-wrap">
                 <Calendar size={14} className="text-gray-400 shrink-0" />
                 <div className="flex items-center gap-1">
-                  <label className="text-xs text-gray-500 shrink-0">From</label>
+                  <label className="text-xs text-gray-500 dark:text-gray-400 shrink-0">From</label>
                   <input
                     type="date"
                     value={dateFrom}
                     max={dateTo || undefined}
                     onChange={(e) => setDateFrom(e.target.value)}
-                    className="text-xs px-2 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white text-gray-700"
+                    className="text-xs px-2 py-1.5 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                   />
                 </div>
                 <div className="flex items-center gap-1">
-                  <label className="text-xs text-gray-500 shrink-0">To</label>
+                  <label className="text-xs text-gray-500 dark:text-gray-400 shrink-0">To</label>
                   <input
                     type="date"
                     value={dateTo}
                     min={dateFrom || undefined}
                     onChange={(e) => setDateTo(e.target.value)}
-                    className="text-xs px-2 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white text-gray-700"
+                    className="text-xs px-2 py-1.5 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                   />
                 </div>
                 {hasDateFilter && (
                   <button
                     onClick={clearDates}
-                    className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                    className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                     title="Clear date filter"
                   >
                     <X size={13} />
@@ -158,7 +158,7 @@ function Alerts() {
               </div>
 
               {/* Divider */}
-              <div className="hidden sm:block w-px h-6 bg-gray-200 mx-1" />
+              <div className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
 
               {/* Location filter */}
               <div className="flex items-center gap-2">
@@ -166,7 +166,7 @@ function Alerts() {
                 <select
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
-                  className="text-xs px-2 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white text-gray-700"
+                  className="text-xs px-2 py-1.5 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4] bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                 >
                   <option value="">All Locations</option>
                   {locationOptions.map((d) => (
@@ -176,7 +176,7 @@ function Alerts() {
                 {locationFilter && (
                   <button
                     onClick={() => setLocationFilter('')}
-                    className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                    className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                     title="Clear location filter"
                   >
                     <X size={13} />
@@ -194,32 +194,32 @@ function Alerts() {
 
           {/* Table */}
           {loading ? (
-            <p className="text-gray-500 text-sm">Loading alerts...</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Loading alerts...</p>
           ) : (
             <Card className="!p-0 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-gray-50 border-b border-gray-100">
-                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide w-28">
+                    <tr className="bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-700">
+                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide w-28">
                         Risk
                       </th>
-                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                         Message
                       </th>
-                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide w-36">
+                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide w-36">
                         Location
                       </th>
-                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide w-44">
+                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide w-44">
                         Date
                       </th>
-                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide w-36">
+                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide w-36">
                         Status
                       </th>
                       <th className="px-5 py-3 w-32" />
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
                     {filtered.length === 0 ? (
                       <tr>
                         <td colSpan={6} className="text-center py-10 text-gray-400 text-sm">
@@ -231,7 +231,9 @@ function Alerts() {
                         <tr
                           key={alert.id}
                           className={`transition-colors ${
-                            !alert.acknowledged ? 'bg-white hover:bg-gray-50' : 'bg-gray-50/50 hover:bg-gray-50'
+                            !alert.acknowledged
+                              ? 'bg-white dark:bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800/40'
+                              : 'bg-gray-50/50 dark:bg-gray-800/20 hover:bg-gray-50 dark:hover:bg-gray-800/40'
                           }`}
                         >
                           {/* Risk */}
@@ -252,19 +254,19 @@ function Alerts() {
                           </td>
 
                           {/* Message */}
-                          <td className="px-5 py-3.5 text-gray-700 max-w-xs">
+                          <td className="px-5 py-3.5 text-gray-700 dark:text-gray-300 max-w-xs">
                             <p className="truncate" title={alert.message}>{alert.message}</p>
                           </td>
 
                           {/* Location */}
-                          <td className="px-5 py-3.5 text-gray-600 text-xs">
+                          <td className="px-5 py-3.5 text-gray-600 dark:text-gray-400 text-xs">
                             {alert.district || '—'}, Rwanda
                           </td>
 
                           {/* Date */}
-                          <td className="px-5 py-3.5 text-gray-500 text-xs whitespace-nowrap">
+                          <td className="px-5 py-3.5 text-gray-500 dark:text-gray-400 text-xs whitespace-nowrap">
                             <div>{new Date(alert.sent_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
-                            <div className="text-gray-400">
+                            <div className="text-gray-400 dark:text-gray-500">
                               {new Date(alert.sent_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
                             </div>
                           </td>
@@ -272,7 +274,7 @@ function Alerts() {
                           {/* Acknowledgement Status */}
                           <td className="px-5 py-3.5">
                             {alert.acknowledged ? (
-                              <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
+                              <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2.5 py-1 rounded-full">
                                 <CheckCircle size={11} />
                                 Acknowledged
                               </span>
@@ -305,7 +307,7 @@ function Alerts() {
 
               {/* Table footer count */}
               {filtered.length > 0 && (
-                <div className="px-5 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-400">
+                <div className="px-5 py-3 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30 text-xs text-gray-400 dark:text-gray-500">
                   Showing {filtered.length} of {alerts.length} alert{alerts.length !== 1 ? 's' : ''}
                   {locationFilter && ` · ${locationFilter}`}
                   {hasDateFilter && ' · date filtered'}

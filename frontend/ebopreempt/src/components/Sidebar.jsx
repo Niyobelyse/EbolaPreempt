@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Activity, LayoutDashboard, Bell, LogOut, Menu, X, History, TrendingUp, FlaskConical } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-
+import ThemeToggle from './ThemeToggle';
 
 const NAV_ITEMS = [
   { label: 'Risk Dashboard', icon: LayoutDashboard, path: '/dashboard' },
@@ -26,11 +26,12 @@ function Sidebar() {
   const content = (
     <div className="flex flex-col h-full">
       {/* Brand */}
-      <div className="px-6 py-6">
+      <div className="px-6 py-6 flex items-center justify-between">
         <div className="flex items-center gap-2 text-white">
           <Activity size={22} className="text-[#06B6D4]" />
           <span className="font-bold text-lg tracking-tight">EbolaPreempt</span>
         </div>
+        <ThemeToggle className="text-white/60 hover:text-white hover:bg-white/10" />
       </div>
 
       {/* Nav */}
@@ -54,8 +55,6 @@ function Sidebar() {
         })}
       </nav>
 
-
-
       {/* Logout */}
       <div className="mt-auto px-6 py-4">
         <button
@@ -72,25 +71,28 @@ function Sidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-[#1E3A5F] text-white">
+      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-[#1E3A5F] dark:bg-[#0D1B2E] text-white">
         <div className="flex items-center gap-2">
           <Activity size={20} className="text-[#06B6D4]" />
           <span className="font-bold">EbolaPreempt</span>
         </div>
-        <button onClick={() => setOpen(true)} aria-label="Open menu">
-          <Menu size={22} />
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle className="text-white/60 hover:text-white hover:bg-white/10" />
+          <button onClick={() => setOpen(true)} aria-label="Open menu">
+            <Menu size={22} />
+          </button>
+        </div>
       </div>
 
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 bg-[#1E3A5F]">
+      <aside className="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 bg-[#1E3A5F] dark:bg-[#0D1B2E]">
         {content}
       </aside>
 
       {/* Mobile drawer */}
       {open && (
         <div className="md:hidden fixed inset-0 z-50 flex">
-          <div className="w-64 bg-[#1E3A5F] flex flex-col">
+          <div className="w-64 bg-[#1E3A5F] dark:bg-[#0D1B2E] flex flex-col">
             <div className="flex justify-end px-4 pt-4">
               <button onClick={() => setOpen(false)} aria-label="Close menu" className="text-white/70">
                 <X size={22} />

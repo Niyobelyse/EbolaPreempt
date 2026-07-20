@@ -1,6 +1,11 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
+from rest_framework.test import APIClient
+from rest_framework import status
 from datetime import date
+from unittest.mock import Mock, patch
 from apps.ingestion.models import WeeklyDataRecord
+from apps.ingestion.services import sync_who_ebola_data
 
 
 class WeeklyDataRecordModelTest(TestCase):
@@ -85,3 +90,64 @@ class WeeklyDataRecordModelTest(TestCase):
                                                   week_start_date=date(2026, 5, 11))
         self.assertEqual(records.count(), 1)
         self.assertEqual(records.first().active_regional_cases, 7.0)
+
+
+class WeeklyDataRecordAPITest(TestCase):
+
+    def test_records_endpoint_is_read_only(self):
+        user = User.objects.create_user(username='reader', password='testpass123')
+        client = APIClient()
+        response = client.post('/api/token/', {'username': 'reader', 'password': 'testpass123'})
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {response.data['access']}")
+
+        response = client.post('/api/records/', {}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+class LiveWHOIngestionTest(TestCase):
+
+    def setUp(self):
+        for district, distance, inflow in [('Rubavu', 50, 100), ('Musanze', 100, 20)]:
+            WeeklyDataRecord.objects.create(
+                district=district,
+                week='2026-W26',
+                week_start_date=date(2026, 6, 22),
+                active_regional_cases=0,
+                distance_to_outbreak_km=distance,
+                border_inflow_count=inflow,
+                transit_hub_count=2,
+                isolation_capacity_score=3,
+            )
+
+    @patch('apps.ingestion.services.requests.get')
+    def test_sync_creates_traceable_estimated_records(self, get):
+        response = Mock()
+        response.text = (
+            'Data as of 05 July 2026. In the Democratic Republic of the Congo, '
+            'a cumulative total of 1,620 laboratory-confirmed cases was reported.'
+        )
+        get.return_value = response
+
+        result = sync_who_ebola_data('https://example.test/who')
+
+        records = WeeklyDataRecord.objects.filter(week='2026-W27').order_by('district')
+        self.assertEqual(result['confirmed_cases'], 1620)
+        self.assertEqual(records.count(), 2)
+        self.assertAlmostEqual(sum(r.active_regional_cases for r in records), 1620)
+        self.assertTrue(all(r.data_source == 'who_regional_estimate' for r in records))
+        self.assertTrue(all(r.source_url == 'https://example.test/who' for r in records))
+
+    @patch('apps.ingestion.services.requests.get')
+    def test_sync_endpoint_requires_staff_user(self, get):
+        response = Mock()
+        response.text = 'Data as of 05 July 2026. A total of 1,620 confirmed cases.'
+        get.return_value = response
+        user = User.objects.create_user(username='reader', password='testpass123')
+        client = APIClient()
+        token_response = client.post('/api/token/', {'username': 'reader', 'password': 'testpass123'})
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {token_response.data['access']}")
+
+        response = client.post('/api/records/sync-live/', {}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

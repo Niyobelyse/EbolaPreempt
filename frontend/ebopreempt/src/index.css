@@ -1,6 +1,6 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
-/* EbolaPreempt risk-based color palette */
 :root {
   --color-brand: #1E3A5F;
   --color-low-risk: #22C55E;
@@ -12,4 +12,8 @@
 body {
   background-color: var(--color-bg);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dark body {
+  background-color: #0F172A;
 }

@@ -152,3 +152,35 @@ class AlertAPITest(TestCase):
     def test_unauthenticated_request_rejected(self):
         unauth = APIClient()
         self.assertEqual(unauth.get('/api/alerts/').status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_only_acknowledged_can_be_updated(self):
+        prediction = _make_prediction()
+        alert = Alert.objects.create(
+            prediction=prediction,
+            alert_level='HIGH',
+            message='HIGH RISK — Musanze.',
+        )
+
+        response = self.client.patch(
+            f'/api/alerts/{alert.id}/', {'message': 'Tampered'}, format='json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        alert.refresh_from_db()
+        self.assertEqual(alert.message, 'HIGH RISK — Musanze.')
+
+    def test_acknowledgement_can_be_updated(self):
+        prediction = _make_prediction()
+        alert = Alert.objects.create(
+            prediction=prediction,
+            alert_level='HIGH',
+            message='HIGH RISK — Musanze.',
+        )
+
+        response = self.client.patch(
+            f'/api/alerts/{alert.id}/', {'acknowledged': True}, format='json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        alert.refresh_from_db()
+        self.assertTrue(alert.acknowledged)

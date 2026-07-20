@@ -1,5 +1,7 @@
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Alert
 from .serializers import AlertSerializer
 
@@ -21,3 +23,12 @@ class AlertViewSet(
         if district:
             queryset = queryset.filter(prediction__record__district=district)
         return queryset
+
+    def partial_update(self, request, *args, **kwargs):
+        """Only acknowledgement is user-editable; alert content is system-owned."""
+        if set(request.data) != {'acknowledged'}:
+            return Response(
+                {'detail': 'Only the acknowledged field can be updated.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return super().partial_update(request, *args, **kwargs)

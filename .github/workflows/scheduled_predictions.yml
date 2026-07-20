@@ -21,13 +21,21 @@ jobs:
           RESPONSE=$(curl -s --max-time 60 -X POST https://ebolapreempt.onrender.com/api/token/ \
             -H "Content-Type: application/json" \
             -d '{"username":"admin","password":"${{ secrets.DJANGO_ADMIN_PASSWORD }}"}')
-          echo "Auth response: $RESPONSE"
           TOKEN=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['access'])")
           echo "token=$TOKEN" >> $GITHUB_OUTPUT
 
+      - name: Sync latest WHO regional-risk data
+        run: |
+          set -o pipefail
+          curl --fail-with-body -s --max-time 60 -X POST https://ebolapreempt.onrender.com/api/records/sync-live/ \
+            -H "Authorization: Bearer ${{ steps.auth.outputs.token }}" \
+            -H "Content-Type: application/json" \
+            | python3 -m json.tool
+
       - name: Run predictions for all districts
         run: |
-          curl -s --max-time 120 -X POST https://ebolapreempt.onrender.com/api/predictions/run-all/ \
+          set -o pipefail
+          curl --fail-with-body -s --max-time 120 -X POST https://ebolapreempt.onrender.com/api/predictions/run-all/ \
             -H "Authorization: Bearer ${{ steps.auth.outputs.token }}" \
             -H "Content-Type: application/json" \
             | python3 -m json.tool

@@ -10,7 +10,7 @@ class Alert(models.Model):
         ('LOW', 'Low Risk'),
         ('HIGH', 'High Risk'),
     ]
-    prediction = models.ForeignKey(
+    prediction = models.OneToOneField(
         Prediction,
         on_delete=models.CASCADE,
         related_name='alerts'

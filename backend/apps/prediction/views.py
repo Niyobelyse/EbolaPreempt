@@ -2,12 +2,12 @@ import pandas as pd
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .models import Prediction
 from .serializers import PredictionSerializer
 from .services import run_prediction_for_district
 
-class PredictionViewSet(viewsets.ModelViewSet):
+class PredictionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Prediction.objects.all().order_by('-predicted_at')
     serializer_class = PredictionSerializer
     permission_classes = [IsAuthenticated]
@@ -35,7 +35,12 @@ class PredictionViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(prediction)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['post'], url_path='run-all')
+    @action(
+        detail=False,
+        methods=['post'],
+        url_path='run-all',
+        permission_classes=[IsAdminUser],
+    )
     def run_all_predictions(self, request):
         """Run predictions for every district at once (used by the weekly cron job)."""
         from apps.ingestion.models import WeeklyDataRecord
@@ -84,7 +89,12 @@ class PredictionViewSet(viewsets.ModelViewSet):
             return Response(result, status=status.HTTP_400_BAD_REQUEST)
         return Response(result)
 
-    @action(detail=False, methods=['post'], url_path='run')
+    @action(
+        detail=False,
+        methods=['post'],
+        url_path='run',
+        permission_classes=[IsAdminUser],
+    )
     def run_prediction(self, request):
         district = request.data.get('district')
         try:

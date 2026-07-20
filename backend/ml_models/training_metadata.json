@@ -1,0 +1,35 @@
+{
+  "trained_at": "2026-07-11T12:07:16.472712+00:00",
+  "algorithm": "IsolationForest",
+  "n_estimators": 200,
+  "contamination": 0.1,
+  "random_state": 42,
+  "training_rows": 240,
+  "training_weeks": [
+    "2026-W20",
+    "2026-W21",
+    "2026-W22",
+    "2026-W23",
+    "2026-W24",
+    "2026-W25",
+    "2026-W26",
+    "2026-W27"
+  ],
+  "source_counts": {
+    "seeded_dataset": 210,
+    "who_regional_estimate": 30
+  },
+  "feature_columns": [
+    "Active Regional Cases",
+    "Distance to Outbreak (km)",
+    "Border Inflow Count",
+    "Isolation Capacity Score",
+    "Case_Trend",
+    "National_Weekly_Cases",
+    "Week_Number"
+  ],
+  "score_bounds": [
+    -0.1517476933635497,
+    0.24387759520427144
+  ]
+}

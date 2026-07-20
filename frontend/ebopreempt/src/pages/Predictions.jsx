@@ -61,7 +61,7 @@ function Predictions() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950">
       <Sidebar />
 
       <div className="md:pl-64">
@@ -69,18 +69,18 @@ function Predictions() {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
                 <TrendingUp size={22} className="text-[#06B6D4]" />
                 Predictions
               </h2>
               <DistrictFilter districts={districts} value={selectedDistrict} onChange={setSelectedDistrict} />
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#EFF6FF] border border-blue-100 text-xs text-blue-700">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#EFF6FF] dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40 text-xs text-blue-700 dark:text-blue-400">
                 <Clock size={13} className="shrink-0 text-[#06B6D4]" />
                 <span>Daily Auto Prediction <strong>at 20:00 CAT</strong></span>
                 {sorted.length > 0 && (
-                  <span className="text-blue-400 ml-1">
+                  <span className="text-blue-400 dark:text-blue-500 ml-1">
                     · Last run {new Date(sorted[0].predicted_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </span>
                 )}
@@ -103,23 +103,23 @@ function Predictions() {
           )}
 
           {loading ? (
-            <p className="text-gray-500 text-sm">Loading predictions...</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Loading predictions...</p>
           ) : (
             <Card className="!p-0 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-gray-50 border-b border-gray-100">
-                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Week</th>
-                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Risk Score</th>
-                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Alert Level</th>
-                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Predicted At</th>
+                    <tr className="bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-700">
+                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Week</th>
+                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Risk Score</th>
+                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Alert Level</th>
+                      <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Predicted At</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
                     {sorted.length === 0 ? (
                       <tr>
-                        <td colSpan={4} className="text-center py-10 text-gray-400 text-sm">
+                        <td colSpan={4} className="text-center py-10 text-gray-400 dark:text-gray-500 text-sm">
                           No predictions yet for {selectedDistrict}. Click "Run Prediction" to generate one.
                         </td>
                       </tr>
@@ -129,13 +129,13 @@ function Predictions() {
                         const { text, bg } = riskColor(score);
                         const isHigh = p.early_warning_alert === 1;
                         return (
-                          <tr key={p.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-5 py-3.5 text-gray-700 font-medium">
+                          <tr key={p.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors">
+                            <td className="px-5 py-3.5 text-gray-700 dark:text-gray-300 font-medium">
                               {p.record?.week ?? '—'}
                             </td>
                             <td className="px-5 py-3.5">
                               <div className="flex items-center gap-3">
-                                <div className="w-24 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                                <div className="w-24 h-1.5 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
                                   <div
                                     className="h-1.5 rounded-full"
                                     style={{
@@ -154,7 +154,7 @@ function Predictions() {
                                 {isHigh ? 'HIGH' : 'LOW'}
                               </span>
                             </td>
-                            <td className="px-5 py-3.5 text-gray-500 text-xs">
+                            <td className="px-5 py-3.5 text-gray-500 dark:text-gray-400 text-xs">
                               <div>{new Date(p.predicted_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
                               <div className="text-gray-400">{new Date(p.predicted_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</div>
                             </td>
@@ -166,7 +166,7 @@ function Predictions() {
                 </table>
               </div>
               {sorted.length > 0 && (
-                <div className="px-5 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-400">
+                <div className="px-5 py-3 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30 text-xs text-gray-400 dark:text-gray-500">
                   {sorted.length} prediction{sorted.length !== 1 ? 's' : ''} for {selectedDistrict}
                 </div>
               )}

@@ -10,10 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path
-from dotenv import load_dotenv
 import os
+from pathlib import Path
+
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -24,11 +26,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-6u2zmq7c9b@p#(!ax&ddom0cxqr#%_fh@ouz=jg*fxofrl3*l_')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
+# A development-only fallback keeps local setup simple, but production must
+# always provide a unique secret through its environment.
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = 'django-insecure-development-only-key'
+    else:
+        raise ImproperlyConfigured('SECRET_KEY must be set when DEBUG=False.')
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
 
@@ -156,3 +164,10 @@ CORS_ALLOWED_ORIGINS = [
 _extra_cors = os.getenv('CORS_ALLOWED_ORIGINS', '')
 if _extra_cors:
     CORS_ALLOWED_ORIGINS += [o.strip() for o in _extra_cors.split(',') if o.strip()]
+
+# WHO AFRO's Ebola topic page is a public, continuously updated source. Override
+# this setting when WHO publishes a more specific outbreak report URL.
+WHO_EBOLA_SOURCE_URL = os.getenv(
+    'WHO_EBOLA_SOURCE_URL',
+    'https://www.afro.who.int/health-topics/disease-outbreaks/ebola-who-african-region',
+)

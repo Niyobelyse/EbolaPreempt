@@ -115,6 +115,22 @@ class PredictionAPITest(TestCase):
         response = unauth.post('/api/predictions/run/', {'district': 'Rubavu'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_non_staff_user_cannot_run_prediction(self):
+        user = User.objects.create_user(username='analyst', password='testpass123')
+        client = APIClient()
+        response = client.post(
+            '/api/token/', {'username': 'analyst', 'password': 'testpass123'}
+        )
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {response.data['access']}")
+
+        response = client.post('/api/predictions/run/', {'district': 'Rubavu'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_prediction_records_are_read_only(self):
+        response = self.client.post('/api/predictions/', {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def test_unauthenticated_latest_risk_rejected(self):
         unauth = APIClient()
         response = unauth.get('/api/predictions/latest-risk/')
