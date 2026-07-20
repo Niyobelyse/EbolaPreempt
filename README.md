@@ -20,9 +20,33 @@ The backend is hosted on Render's free tier and may take 30 to 60 seconds to wak
 
 ## Screenshots
 
+### Public Pages
+
+**Landing Page**
+
+![Landing](docs/screenshots/landing.png)
+
+**About**
+
+![About](docs/screenshots/about.png)
+
+**How It Works**
+
+![How It Works](docs/screenshots/how-it-works.png)
+
 **Login**
 
 ![Login](docs/screenshots/login.png)
+
+**Register**
+
+![Register](docs/screenshots/register.png)
+
+**Privacy Policy**
+
+![Privacy Policy](docs/screenshots/privacy.png)
+
+### Dashboard (Authenticated)
 
 **Risk Dashboard**
 
